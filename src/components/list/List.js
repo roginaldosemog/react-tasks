@@ -1,13 +1,8 @@
 import React from "react";
 import TaskCard from "../taskCard/TaskCard";
-import AddTaskForm from "../addTaskForm/AddTaskForm";
 import "./List.css";
 
 export default class List extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const cards = this.props.cards.map((card, index) => {
       return (
@@ -28,9 +23,6 @@ export default class List extends React.Component {
           onDrop={this.props.onDrop}
         >
           {cards}
-          <li className="add-list-wrapper">
-            <AddTaskForm formNum={this.props.id} onAdd={this.props.onAdd} />
-          </li>
         </ul>
       </div>
     );

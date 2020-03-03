@@ -128,34 +128,11 @@ export default class Board extends Component {
     localStorage.setItem("lists", JSON.stringify(parsedLS));
   };
 
-  //add some new task cards
-  addTaskCard(taskText, listNumber) {
-    const rawLS = localStorage.getItem("lists");
-    const parsedLS = JSON.parse(rawLS);
-
-    const newTask = {
-      taskText,
-      listNumber,
-      timeId: new Date().valueOf()
-    };
-
-    parsedLS[listNumber].cards.push(newTask);
-
-    //sync state and localStorage
-    this.setState({
-      lists: parsedLS
-    });
-    localStorage.setItem("lists", JSON.stringify(parsedLS));
-  }
-
   render() {
     const lists = this.state.lists.map((list, index) => (
       <li className="list-wrapper" key={index}>
         <List
           {...list}
-          onAdd={(taskText, listNumber) =>
-            this.addTaskCard(taskText, listNumber)
-          }
           onDragStart={(e, fromList) => this.onDragStart(e, `${list.id}`)}
           onDragOver={e => this.onDragOver(e)}
           onDrop={(e, listNum) => {

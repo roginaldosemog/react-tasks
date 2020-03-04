@@ -5,7 +5,10 @@ import "./Board.css";
 export default class Board extends Component {
   constructor(props) {
     super(props);
-    //if there's a localStorage to be had grab it otherwise set state
+
+    localStorage.clear();
+
+    // if there's a localStorage to be had grab it otherwise set state
     if (localStorage.getItem("lists")) {
       const rawLS = localStorage.getItem("lists");
       const parsedLS = JSON.parse(rawLS);
@@ -14,7 +17,7 @@ export default class Board extends Component {
       this.state = {
         lists: [
           {
-            title: "Derrick",
+            title: "To Do",
             id: 0,
             cards: [
               {
@@ -30,7 +33,7 @@ export default class Board extends Component {
             ]
           },
           {
-            title: "Maxwell",
+            title: "Doing",
             id: 1,
             cards: [
               {
@@ -46,7 +49,7 @@ export default class Board extends Component {
             ]
           },
           {
-            title: "Zaza",
+            title: "Done",
             id: 2,
             cards: [
               {
@@ -58,22 +61,6 @@ export default class Board extends Component {
                 taskText: "default task card 2",
                 listNumber: 2,
                 timeId: 5
-              }
-            ]
-          },
-          {
-            title: "Sam",
-            id: 3,
-            cards: [
-              {
-                taskText: "default task card 1",
-                listNumber: 3,
-                timeId: 6
-              },
-              {
-                taskText: "default task card 2",
-                listNumber: 3,
-                timeId: 7
               }
             ]
           }
@@ -112,9 +99,13 @@ export default class Board extends Component {
     const taskCard = cardsArray.find(
       card => card.timeId == parsedDragInfo.taskId
     );
+
+    taskCard.taskText = parsedLS[listNum].title
+
     const indexOfCard = cardsArray.findIndex(
       card => card.timeId == parsedDragInfo.taskId
     );
+
     parsedLS[parsedDragInfo.fromList].cards.splice(indexOfCard, 1);
     parsedLS[listNum].cards.push({
       ...taskCard,

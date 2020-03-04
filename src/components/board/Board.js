@@ -64,10 +64,29 @@ export default class Board extends Component {
               }
             ]
           }
+        ],
+        tasks: [
+          {
+            title: "Igor Aragão",
+            status: "doing"
+          },
+          {
+            title: "Matheus Toscano",
+            status: "done"
+          },
+          {
+            title: "Karine Bruno",
+            status: "todo"
+          },
+          {
+            title: "Guilherme Richard",
+            status: "todo"
+          }
         ]
       };
 
       localStorage.setItem("lists", JSON.stringify(this.state.lists));
+      localStorage.setItem("tasks", JSON.stringify(this.state.tasks)); // store tasks object as string
     }
   }
 

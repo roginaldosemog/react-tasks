@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import List from "../newList/List";
 import "./Board.css";
 
 export default class Board extends Component {
@@ -9,7 +10,7 @@ export default class Board extends Component {
 
     // if there's a localStorage to be had grab it otherwise set state
     if (localStorage.getItem("tasks")) {
-      const parsedTasks = this.getParsedTasks();
+      const parsedTasks = this.getLocalStorageParsed("tasks");
       this.state = { tasks: parsedTasks };
     } else {
       this.state = {
@@ -42,32 +43,19 @@ export default class Board extends Component {
     }
   }
 
-  getParsedTasks() {
-    const rawTasks = localStorage.getItem("tasks");
+  getLocalStorageParsed(item) {
+    const rawTasks = localStorage.getItem(item);
     const parsedTasks = JSON.parse(rawTasks);
     return parsedTasks;
   }
 
   render() {
-    const tasks = this.state.tasks.map((task, index) => (
-      <li key={index}>
-        <div className="task-card" draggable="true" id={0}>
-          {task.title}
-          <br />
-          {task.status}
-        </div>
-      </li>
-    ));
-
     return (
       <div className="board">
         <ul className="lists">
-          <li className="list-wrapper" key={0}>
-            <div>
-              <h2 className={`name-header name-${0}`}>Tasks</h2>
-              <ul className="list">{tasks}</ul>
-            </div>
-          </li>
+          <List tasks={this.state.tasks} name="A fazer" status="todo" />
+          <List tasks={this.state.tasks} name="Fazendo" status="doing" />
+          <List tasks={this.state.tasks} name="Feito" status="done" />
         </ul>
       </div>
     );

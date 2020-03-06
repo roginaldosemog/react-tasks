@@ -45,17 +45,70 @@ export default class Board extends Component {
 
   getLocalStorageParsed(item) {
     const rawTasks = localStorage.getItem(item);
-    const parsedTasks = JSON.parse(rawTasks);
-    return parsedTasks;
+    const tasks = JSON.parse(rawTasks);
+    return tasks;
   }
+
+  onDragStart = e => {
+    const taskId = e.currentTarget.id;
+    localStorage.setItem("draggedTaskId", taskId);
+  };
+
+  onDragOver = e => {
+    e.preventDefault();
+  };
+
+  onDrop = (e, status) => {
+    const droppedTaskId = localStorage.getItem("draggedTaskId");
+    const tasks = this.getLocalStorageParsed("tasks");
+
+    // get task
+    const droppedTaskIndex = tasks.findIndex(task => {
+      return task.id == droppedTaskId
+    });
+    tasks[droppedTaskIndex].status = status;
+    
+    //sync the state and localStorage
+    this.setState({
+      tasks: tasks
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  };
 
   render() {
     return (
       <div className="board">
         <ul className="lists">
-          <List tasks={this.state.tasks} name="A fazer" status="todo" />
-          <List tasks={this.state.tasks} name="Fazendo" status="doing" />
-          <List tasks={this.state.tasks} name="Feito" status="done" />
+          <List
+            tasks={this.state.tasks}
+            name="A fazer"
+            status="todo"
+            onDragStart={e => this.onDragStart(e)}
+            onDragOver={e => this.onDragOver(e)}
+            onDrop={e => {
+              this.onDrop(e, "todo");
+            }}
+          />
+          <List
+            tasks={this.state.tasks}
+            name="Fazendo"
+            status="doing"
+            onDragStart={e => this.onDragStart(e)}
+            onDragOver={e => this.onDragOver(e)}
+            onDrop={e => {
+              this.onDrop(e, "doing");
+            }}
+          />
+          <List
+            tasks={this.state.tasks}
+            name="Feito"
+            status="done"
+            onDragStart={e => this.onDragStart(e)}
+            onDragOver={e => this.onDragOver(e)}
+            onDrop={e => {
+              this.onDrop(e, "done");
+            }}
+          />
         </ul>
       </div>
     );

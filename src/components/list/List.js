@@ -1,30 +1,39 @@
-import React from "react";
-import TaskCard from "../taskCard/TaskCard";
+import React, { Component } from "react";
 import "./List.css";
 
-export default class List extends React.Component {
+export default class List extends Component {
   render() {
-    const cards = this.props.cards.map((card, index) => {
-      return (
+    const { tasks, name, status } = this.props;
+    const filteredTasks = tasks
+      .filter(task => task.status === status)
+      .map((task, index) => (
         <li key={index}>
-          <TaskCard {...card} onDragStart={this.props.onDragStart} />
+          <div
+            className="task-card"
+            id={[task.id]}
+            draggable="true"
+            onDragStart={this.props.onDragStart}
+          >
+            {task.title}
+            <br />
+            {task.status}
+          </div>
         </li>
-      );
-    });
+      ));
 
     return (
-      <div>
-        <h2 className={`name-header name-${this.props.id}`}>
-          {this.props.title}
-        </h2>
-        <ul
-          className="list"
-          onDragOver={this.props.onDragOver}
-          onDrop={this.props.onDrop}
-        >
-          {cards}
-        </ul>
-      </div>
+      <li className="list-wrapper">
+        <div>
+          <h2 className="name-header">{name}</h2>
+          <ul
+            className="list"
+            onDragOver={this.props.onDragOver}
+            onDrop={this.props.onDrop}
+          >
+            {filteredTasks}
+          </ul>
+        </div>
+      </li>
     );
   }
 }
